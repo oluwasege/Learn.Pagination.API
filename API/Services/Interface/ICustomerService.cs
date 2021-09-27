@@ -1,4 +1,6 @@
 ﻿using API.Entities;
+using API.Filter;
+using API.Wrappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ namespace API.Services.Interface
 {
     public interface ICustomerService
     {
-        public Task<List<Customer>> GetAllCustomers();
-        public Task<Customer> GetCustomerById(int id);
+        public Task<PagedResponse<List<Customer>>> GetAllCustomers(PaginationFilter filter);
+        public Task<Response<Customer>> GetCustomerById(int id);
     }
 }

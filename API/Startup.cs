@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using API.Data;
 using API.Services.Interface;
 using API.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace API
 {
@@ -40,6 +41,14 @@ namespace API
                     Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddHttpContextAccessor();
+            services.AddSingleton<IUriService>(o =>
+            {
+                var accessor = o.GetRequiredService<IHttpContextAccessor>();
+                var request = accessor.HttpContext.Request;
+                var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UriService(uri);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
